@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chunfeng.mapper.StudentMapper">
+    <!--映射关系-->
+    <resultMap id="studentMap" type="com.chunfeng.entity.Student">
+        <result property="classId" column="class_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <!--查看所有学生-->
+    <select id="selectAllStudent" resultType="com.chunfeng.entity.Student" resultMap="studentMap">
+        select id,
+               name,
+               age,
+               sex,
+               address,
+               class_id,
+               create_user,
+               update_user,
+               create_time,
+               update_time
+        from student;
+    </select>
+    <!--根据学生Id查询单个学生-->
+    <select id="selectStudentById" resultType="com.chunfeng.entity.Student" resultMap="studentMap">
+        select id,
+               name,
+               age,
+               sex,
+               address,
+               class_id,
+               create_user,
+               update_user,
+               create_time,
+               update_time
+        from student
+        where id = #{id};
+    </select>
+    <!--根据班级Id查询学生-->
+    <select id="selectStudentByClassId" resultType="com.chunfeng.entity.Student" resultMap="studentMap">
+        select id,
+        name,
+        age,
+        sex,
+        address,
+        class_id,
+        create_user,
+        update_user,
+        create_time,
+        update_time
+        from student where class_id in
+        <foreach collection="classIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+    </select>
+    <!--添加一条学生信息-->
+    <insert id="insertStudent">
+        insert into student (name, age, sex, address, class_id, create_user, create_time)
+        values (#{name}, #{age}, #{sex}, #{address}, #{classId}, #{createUser}, #{createTime});
+    </insert>
+    <!--修改一条学生信息-->
+    <update id="updateStudentById">
+        update student
+        <set>
+            <if test="name!=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="age!=null">
+                age=#{age},
+            </if>
+            <if test="sex!=null">
+                sex=#{sex},
+            </if>
+            <if test="address!=null and address!=''">
+                address=#{address},
+            </if>
+            <if test="classId!=null">
+                class_id=#{classId},
+            </if>
+            <if test="updateUser!=null">
+                update_user=#{updateUser},
+            </if>
+            <if test="updateTime!=null">
+                update_time=#{updateTime}
+            </if>
+        </set>
+        where id=#{id};
+    </update>
+    <!--批量删除学生信息-->
+    <delete id="deleteStudentById">
+        delete
+        from student
+        where id in
+        <foreach collection="studentIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+    </delete>
+    <!--根据Id记录学生个数-->
+    <select id="countStudentById" resultType="java.lang.Integer">
+        select count(*)
+        from student where id in
+        <foreach collection="studentIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+    </select>
+</mapper>

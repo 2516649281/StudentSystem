@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chunfeng.mapper.ClassMapper">
+    <!--映射关系-->
+    <resultMap id="classMap" type="com.chunfeng.entity.Class">
+        <result property="className" column="class_name"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <!--查询所有班级-->
+    <select id="selectAllClass" resultType="com.chunfeng.entity.Class" resultMap="classMap">
+        select id, class_name, create_user, update_user, create_time, update_time
+        from class;
+    </select>
+    <!--根据班级Id查询-->
+    <select id="selectClassById" resultType="com.chunfeng.entity.Class" resultMap="classMap">
+        select id, class_name, create_user, update_user, create_time, update_time
+        from class where id in
+        <foreach collection="classIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+    </select>
+    <!--添加一条班级信息-->
+    <insert id="insertClass">
+        insert into class (class_name, create_user, create_time)
+        values (#{className}, #{createUser}, #{createTime});
+    </insert>
+    <!--根据班级Id修改一条班级信息-->
+    <update id="updateClassById">
+        update class
+        <set>
+            <if test="className!=null and className!=''">
+                class_name=#{className},
+            </if>
+            <if test="createUser!=null">
+                create_user=#{createUser},
+            </if>
+            <if test="createTime!=null">
+                create_time=#{createTime}
+            </if>
+        </set>
+        where id=#{id};
+    </update>
+    <!--根据班级Id批量删除班级-->
+    <delete id="deleteClassById">
+        delete
+        from class
+        where id in
+        <foreach collection="classIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+    </delete>
+    <!--根据Id值记录班级个数-->
+    <select id="countById" resultType="java.lang.Integer">
+        select count(*)
+        from class where id in
+        <foreach collection="classIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+    </select>
+</mapper>
