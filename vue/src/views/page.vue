@@ -11,8 +11,7 @@
           <span>{{ item.name }}</span>
         </el-menu-item>
       </el-menu>
-    </el-col
-    >
+    </el-col>
     <el-col :span="21">
       <el-container>
         <el-main>
@@ -52,6 +51,7 @@ export default {
     };
   },
   created() {
+    this.getPath("student");
   },
   methods: {
     getPath(name) {

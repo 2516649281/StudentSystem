@@ -1,6 +1,6 @@
 package com.chunfeng.interceptor;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.chunfeng.result.JsonRequest;
 import com.chunfeng.result.ServiceEnum;
 import com.chunfeng.utils.RedisClientsUtils;
@@ -70,9 +70,11 @@ public class LoginInterceptor implements HandlerInterceptor {
      * @throws IOException 如果响应体创建失败则抛出此异常
      */
     private void getJson(HttpServletResponse response) throws IOException {
-        String json = JsonRequest.error(ServiceEnum.UNAUTHORIZED).toString();
         response.setStatus(ServiceEnum.UNAUTHORIZED.getStatus());
         response.setHeader("Content-Type", "application/json;charset=utf-8");
-        response.getWriter().write(JSON.toJSONString(json));
+        JsonRequest<Void> json = JsonRequest.error(ServiceEnum.UNAUTHORIZED);
+        String jsonString = JSONObject.toJSONString(json);
+        response.getWriter().write(jsonString);
+        log.info("响应体打印:{}", jsonString);
     }
 }

@@ -2,7 +2,7 @@ import axios from "axios";
 
 //设置公共后台url地址
 const server = axios.create({
-    baseURL: "http://localhost:8000/api",
+    baseURL: "http://47.92.215.94:8000/api",
 });
 
 server.interceptors.request.use(
