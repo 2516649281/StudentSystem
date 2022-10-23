@@ -31,8 +31,7 @@
               :identifyCode="identifyCode"
               @click="refreshCode"
           ></s-identify>
-        </template
-        >
+        </template>
       </el-input>
     </el-form-item>
     <el-form-item>
@@ -41,8 +40,7 @@
     <el-form-item>
       <el-button type="primary" @click="login(user.name, user.password)"
       >登录
-      </el-button
-      >
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -109,6 +107,7 @@ export default {
       this.$refs["user"].validate((valid) => {
         if (valid) {
           login(name, password).then((req) => {
+            console.log(req);
             if (req.data.status === 200) {
               this.$message({
                 type: "success",

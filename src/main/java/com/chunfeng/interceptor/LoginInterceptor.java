@@ -53,6 +53,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         Object user = TokenUtils.checkToken(token);
         //获取Redis中的用户信息
         String user1 = redisClientsUtils.get("user");
+        //redis中为空
+        if (user1 == null) {
+            getJson(response);
+            return false;
+        }
         //比较
         if (!user1.equals(user.toString())) {
             log.warn("拦截器拦截!原因:请求token与本地token不符!需要的用户Id:{},实际传入用户Id:{}", user1, user.toString());
