@@ -195,6 +195,16 @@ public class UserServiceImpl implements IUserService {
             log.warn("待删除的用户个数与数据库已存在的用户个数不符!数据库实际存在{}个,需要{}个", count, userIds.length);
             return JsonRequest.error(ServiceEnum.NOT_FOUND);
         }
+        //获取redis中的用户信息
+        String user = redisClientsUtils.get("user");
+        //判断待删除的用户与已登陆用户是否一致
+        for (Integer userId : userIds) {
+            //判断该用户是否已登录
+            if (userId.toString().equals(user)) {
+                log.warn("Id为{}的用户已登陆!", user);
+                return JsonRequest.error(ServiceEnum.DELETE_ERROR);
+            }
+        }
         //删除逻辑
         Integer column = userMapper.deleteUserById(userIds);
         if (column < 1) {

@@ -3,8 +3,7 @@
     <el-col :span="3">
       <el-button type="warning" @click="this.deleteUsers(this.deleteUserIds)"
       >批量删除
-      </el-button
-      >
+      </el-button>
     </el-col>
   </el-row>
   <el-row>
@@ -28,15 +27,13 @@
           <template #default="scope">
             <el-button size="small" @click="this.updateUserClick(scope.row)"
             >修改
-            </el-button
-            >
+            </el-button>
             <el-button
                 size="small"
                 type="danger"
                 @click="deleteOneUser(scope.row.id)"
             >删除
-            </el-button
-            >
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -67,8 +64,7 @@
       <el-button @click="updateDialogVisible = false">取消</el-button>
       <el-button type="primary" @click="this.updateOneUser(this.updateUserForm)"
       >修改
-      </el-button
-      >
+      </el-button>
     </template>
   </el-dialog>
 </template>
@@ -168,11 +164,21 @@ export default {
     //删除一条用户信息
     deleteOneUser(ids) {
       var id = [ids];
+      var user = sessionStorage.getItem("user");
       this.$confirm("你真的要删除这条用户的信息吗?(真的永久)", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
+        //非法删除判断
+        if (ids.toString() === user) {
+          this.$message({
+            type: "error",
+            message: "不能删除自己哦!",
+            showClose: true,
+          });
+          return;
+        }
         deleteOneUser(id).then((req) => {
           if (req.data.success) {
             this.$message({

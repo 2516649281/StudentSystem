@@ -48,6 +48,7 @@
 <script>
 import {login} from "../api/user";
 import SIdentify from "../components/identify.vue";
+import jwtDecode from "jwt-decode";
 
 export default {
   components: {
@@ -114,7 +115,11 @@ export default {
                 message: "登陆成功!",
                 showClose: true,
               });
-              sessionStorage.setItem("token", req.data.data);
+              //获取token
+              var token = req.data.data;
+              console.log(jwtDecode(token));
+              sessionStorage.setItem("token", token);
+              sessionStorage.setItem("user", jwtDecode(token).user);
               this.$router.push({
                 name: "page",
               });
