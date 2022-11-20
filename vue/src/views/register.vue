@@ -1,6 +1,12 @@
 <template>
   <div id="background"></div>
-  <el-form class="main" :model="user" ref="user" :rules="registerRoles">
+  <el-form
+      class="main"
+      :model="user"
+      ref="user"
+      :rules="registerRoles"
+      @keyup.enter="register(user)"
+  >
     <el-form-item><h1>注册</h1></el-form-item>
     <el-form-item prop="name">
       <el-input required="required" placeholder="用户名" v-model="user.name"/>
@@ -33,8 +39,7 @@
               :identifyCode="identifyCode"
               @click="refreshCode"
           ></s-identify>
-        </template
-        >
+        </template>
       </el-input>
     </el-form-item>
     <el-form-item>
